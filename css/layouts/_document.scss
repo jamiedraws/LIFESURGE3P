@@ -1,0 +1,65 @@
+@use "sass:map";
+@use "sass:color";
+
+$sizes: (
+    desktop: 55rem
+);
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+// layouts
+@use "../../Shared/css/template/base/layouts/document";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+@mixin base {
+    @include document.base;
+
+    html {
+        font: 1.25rem/1.5 fonts.get(secondary), sans-serif;
+
+        @media all and (max-width: queries.get(document-lg)) {
+            font-size: 1rem;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+        }
+
+        @include background.color-map(colors.get(light), colors.get(primary));
+    }
+
+    @include background.contain {
+        // background: whitesmoke;
+    }
+
+    @include list-marker {
+        background-image: url(/images/icons/chevron.svg);
+    }
+
+    @include background.name-color-map(
+        "primary",
+        colors.get(primary),
+        colors.get(light)
+    );
+
+    @include background.name-color-map(
+        "accent",
+        colors.get(accent),
+        colors.get(primary)
+    ) {
+        @include list-marker {
+            background-image: url(/images/icons/chevron-primary.svg);
+        }
+    }
+
+    @content;
+}
+
+@mixin list-marker {
+    ul > li::before,
+    ol > li::before {
+        @content;
+    }
+}

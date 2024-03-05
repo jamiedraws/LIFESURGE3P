@@ -1,0 +1,221 @@
+@use "sass:map";
+@use "sass:color";
+
+$select: ".speaker" !default;
+
+$queries: (
+    md: 25rem,
+    lg: 52.375rem,
+    xl: 68.5rem
+);
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// components
+@use "../components/card";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+// media
+@use "../../Shared/css/template/base/media/contain";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/position";
+@use "../../Shared/css/template/base/abstracts/group";
+@use "../../Shared/css/template/base/abstracts/copy";
+
+@mixin base {
+    #{$select} {
+        @include background.contain {
+            background: colors.get(placeholder);
+        }
+
+        @content;
+    }
+}
+
+@mixin create-alternate-pattern(
+    $columns: 4,
+    $offsets: (
+        2,
+        4,
+        5,
+        7
+    )
+) {
+    $step: $columns * 2;
+
+    @each $offset in $offsets {
+        &:nth-child(#{$step}n + #{$offset}) {
+            @content;
+        }
+    }
+}
+
+@mixin when-card-is-inactive {
+    &:not(:hover):not(:focus):not(:focus-within) {
+        @content;
+    }
+}
+
+@mixin cards {
+    #{$select} {
+        &--cards {
+            #{$select} {
+                &__group {
+                    @include group.contain;
+
+                    @media all and (min-width: map.get($queries, lg)) {
+                        @include group.gutter(0);
+                    }
+
+                    > * {
+                        flex: 1 1 9em;
+
+                        @media all and (min-width: map.get($queries, md)) {
+                            flex-basis: 40%;
+                        }
+
+                        @media all and (min-width: map.get($queries, lg)) {
+                            flex-basis: 30%;
+                        }
+
+                        @media all and (min-width: map.get($queries, xl)) {
+                            flex-basis: 25%;
+                        }
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+
+    @include card.base;
+    @include card.speaker {
+        figcaption {
+            @include background.color-map(
+                color.adjust(colors.get(accent), $alpha: -0.1),
+                colors.get(primary)
+            );
+        }
+
+        @include when-card-is-inactive {
+            @media all and (min-width: map.get($queries, lg)) and (max-width: map.get($queries, xl)) {
+                @include create-alternate-pattern(
+                    $columns: 3,
+                    $offsets: (
+                        2,
+                        4,
+                        6
+                    )
+                ) {
+                    figcaption {
+                        @include background.color-map(
+                            colors.get(primary),
+                            colors.get(light)
+                        );
+                    }
+                }
+            }
+
+            @media all and (min-width: map.get($queries, xl)) {
+                @include create-alternate-pattern(
+                    $columns: 4,
+                    $offsets: (
+                        2,
+                        4,
+                        5,
+                        7
+                    )
+                ) {
+                    figcaption {
+                        @include background.color-map(
+                            colors.get(primary),
+                            colors.get(light)
+                        );
+                    }
+                }
+            }
+        }
+
+        @media all and (min-width: map.get($queries, lg)) {
+            overflow: hidden;
+
+            figcaption {
+                transition: transform 0.3s ease-in-out,
+                    background 0.3s ease-in-out;
+                @include position.center-absolute;
+                z-index: 1;
+            }
+
+            @include when-card-is-inactive {
+                figcaption {
+                    justify-content: flex-start;
+                    transform: translateY(78%);
+                }
+
+                #{card.$select} {
+                    &__role {
+                        opacity: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@mixin picture-text {
+    #{$select} {
+        &--picture-text {
+            padding: 2em 0;
+
+            &:nth-child(odd) {
+                #{$select} {
+                    &__group {
+                        flex-direction: row-reverse;
+                    }
+                }
+            }
+
+            picture {
+                @include contain.ratio(1/1);
+                max-width: 25em;
+            }
+
+            #{$select} {
+                &__group {
+                    @include group.contain(1em);
+                    align-items: flex-start;
+                }
+
+                &__title,
+                &__role {
+                    font-family: fonts.get(primary-cond), sans-serif;
+                    text-transform: uppercase;
+                }
+
+                &__title {
+                    font-size: 2.75em;
+                    line-height: 1;
+                }
+
+                &__role {
+                    font-size: 1.5em;
+                    line-height: 1;
+                }
+
+                &__text {
+                    flex: 1 1 25em;
+
+                    @include copy.separate;
+                }
+            }
+
+            @content;
+        }
+    }
+}

@@ -1,0 +1,74 @@
+$select: ".card" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// components
+@use "../components/button";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/copy";
+
+// media
+@use "../../Shared/css/template/base/media/contain";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+@mixin base {
+    #{$select} {
+        @content;
+    }
+}
+
+@mixin speaker {
+    #{$select} {
+        &--speaker {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            picture {
+                @include contain.ratio(1/1);
+            }
+
+            figcaption {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                flex: 1 1 auto;
+                padding: 1em;
+                text-align: center;
+                font-family: fonts.get(primary-cond), sans-serif;
+
+                @include copy.separate(0.75em);
+            }
+
+            a {
+                @include button.structure {
+                    @include button.color-map(
+                        colors.get(light),
+                        colors.get(primary)
+                    );
+                }
+            }
+
+            #{$select} {
+                &__name {
+                    text-transform: uppercase;
+                    font-size: 1em;
+                    line-height: 1;
+                }
+
+                &__role {
+                    max-width: 10em;
+                    line-height: 1.25;
+                }
+            }
+
+            @content;
+        }
+    }
+}

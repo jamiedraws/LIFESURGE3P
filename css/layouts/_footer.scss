@@ -1,0 +1,15 @@
+$select: ".footer" !default;
+
+@mixin base {
+    #{$select} {
+        text-align: center;
+        text-transform: uppercase;
+
+        address {
+            font-style: normal;
+            font-size: 0.75rem;
+        }
+
+        @content;
+    }
+}

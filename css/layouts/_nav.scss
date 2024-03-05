@@ -1,0 +1,116 @@
+@use "sass:map";
+
+$select: ".nav" !default;
+
+$mq: (
+    container-max: 68.75rem,
+    container-min: 68.75rem,
+    event-logo-text-min: 20rem,
+    event-logo-text: 21rem
+);
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+// layout
+@use "../../Shared/css/template/base/layouts/nav" with (
+    $colors: (
+        background: colors.get(light),
+        text: colors.get(primary),
+        button-close: colors.get(primary)
+    ),
+    $mq: $mq
+);
+
+// components
+@use "../components/event";
+
+@mixin base {
+    @include event.base;
+    @include event.logo-text;
+
+    @include nav.new {
+        font: 1em fonts.get(primary-cond), sans-serif;
+        text-transform: uppercase;
+
+        &__link {
+            padding: 1em;
+        }
+
+        &__event-logo-text {
+            flex: 1;
+        }
+
+        &__event-logo-text-convert {
+            @media all and (max-width: map.get($mq, event-logo-text)) {
+                @include event.logo-text-stack;
+            }
+
+            @media all and (min-width: map.get($mq, event-logo-text)) {
+                @include event.logo-text-inline;
+            }
+        }
+
+        &__event-logo-text-inline {
+            @include event.logo-text-inline;
+
+            @media all and (max-width: map.get($mq, event-logo-text-min)) {
+                @include event.hide-text;
+            }
+        }
+
+        &__event-logo-text-stack {
+            @include event.logo-text-stack;
+        }
+    }
+
+    @include nav.bar {
+        &__in {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        &__pane {
+            flex-grow: 0;
+            flex-basis: 30em;
+        }
+
+        &__logo {
+            display: none;
+        }
+
+        &__list {
+            justify-content: flex-end;
+        }
+
+        &__list > a {
+            flex-grow: 0;
+        }
+
+        &__button {
+            padding-right: 0;
+        }
+    }
+
+    @include nav.drawer {
+        &__in {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        &__logo {
+            flex-grow: 1;
+            padding: 0;
+        }
+
+        &__label {
+            margin-left: 1em;
+        }
+    }
+
+    #{$select} {
+        @content;
+    }
+}

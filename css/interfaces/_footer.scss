@@ -1,0 +1,6 @@
+// layouts
+@use "../layouts/footer";
+
+@mixin copyright {
+    @include footer.base;
+}

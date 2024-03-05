@@ -1,0 +1,74 @@
+@use "sass:map";
+@use "sass:color";
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// interfaces
+@use "../interfaces/header";
+@use "../interfaces/footer";
+
+// layouts
+@use "../layouts/document";
+@use "../layouts/content";
+
+@use "../../Shared/css/template/base/layouts/view";
+@use "../../Shared/css/template/base/layouts/section" with (
+    $container: map.get(document.$sizes, desktop),
+    $frame: 1rem
+);
+
+// components
+@use "../components/button";
+@use "../../Shared/css/template/base/components/link";
+@use "../../Shared/css/template/dtm/components/modal" with (
+    $color: colors.get(light),
+    $background-color: color.adjust(colors.get(primary), $alpha: -0.3)
+);
+
+// media
+@use "../../Shared/css/template/base/media/contain";
+@use "../../Shared/css/template/base/media/load-item";
+
+// utils
+@use "../../Shared/css/template/base/utils/defer";
+@use "../../Shared/css/template/base/utils/delay-input";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+@mixin critical {
+    @include fonts.request;
+    @include document.base;
+
+    @include view.new;
+    @include view.set-anchor-position(
+        $static-amount: 4.25rem,
+        $dynamic-amount: 3.75rem
+    );
+    @include section.new;
+    @include link.base;
+
+    @include contain.new;
+    @include load-item.new;
+
+    @include defer.new;
+    @include delay-input.new;
+    @include modal.new;
+
+    @include header.navbar;
+    @include button.base;
+
+    @include content.base;
+    @include content.title-text;
+    @include content.text;
+
+    @include footer.copyright;
+
+    @content;
+}
+
+@mixin defer {
+    @content;
+}

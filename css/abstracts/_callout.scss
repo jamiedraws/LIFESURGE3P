@@ -1,0 +1,23 @@
+$select: ".callout" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+@mixin base {
+    #{$select} {
+        display: inline-block;
+        text-transform: uppercase;
+        text-align: center;
+        font-weight: 900;
+        padding: 0.5em 1em;
+        border: 0.1rem solid colors.get(primary);
+
+        @include background.color-map(colors.get(light), colors.get(callout));
+
+        @content;
+    }
+}

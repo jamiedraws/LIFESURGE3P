@@ -1,0 +1,74 @@
+// interfaces
+@use "../interfaces/app";
+
+// layouts
+@use "../layouts/content";
+@use "../layouts/ticket";
+@use "../layouts/speaker";
+@use "../layouts/hero";
+@use "../layouts/faq";
+
+// components
+@use "../components/offer";
+@use "../components/card";
+@use "../components/quote";
+
+// abstracts
+@use "../abstracts/markdown-price";
+@use "../abstracts/callout";
+
+@mixin index {
+    @include app.defer {
+        @include hero.base;
+        @include hero.ticket;
+        @include quote.base;
+        @include quote.bars;
+        @include content.title-box;
+
+        @include content.text-map;
+        @include content.title-subtitle;
+
+        @include content.text-video;
+        @include content.icon-text-list-group;
+        @include content.icon-text-list;
+
+        @include content.ticket;
+        @include offer.base;
+        @include offer.flag-text;
+        @include content.text-list;
+
+        @include callout.base;
+        @include markdown-price.base;
+
+        @include ticket.base;
+        @include ticket.list;
+        @include ticket.sold-out;
+        @include ticket.nav;
+
+        @include speaker.base;
+        @include speaker.cards;
+    }
+}
+
+@mixin speakers {
+    @include app.defer {
+        @include content.title-box;
+        @include speaker.base;
+        @include speaker.picture-text;
+    }
+}
+
+@mixin benefits {
+    @include app.defer {
+        @include content.title-box;
+        @include content.icon-text-list-group;
+        @include content.icon-text-list;
+    }
+}
+
+@mixin faq {
+    @include app.defer {
+        @include faq.base;
+        @include content.title-box;
+    }
+}

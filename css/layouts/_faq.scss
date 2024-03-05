@@ -1,0 +1,37 @@
+$select: ".faq" !default;
+
+@use "../config/colors";
+@use "../../Shared/css/template/base/abstracts/copy";
+
+%separate-content {
+    @include copy.separate(2em);
+}
+
+@mixin base {
+    #{$select} {
+        @extend %separate-content;
+
+        &__title {
+            color: colors.get(accent);
+            font-size: 1.5em;
+            margin-top: 3em;
+        }
+
+        &__question {
+            font-size: 1em;
+            font-weight: bold;
+            padding-bottom: 0.5em;
+        }
+
+        &__answer {
+            @include copy.separate;
+            font-size: 1em;
+        }
+
+        &__list {
+            @extend %separate-content;
+        }
+
+        @content;
+    }
+}

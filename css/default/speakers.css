@@ -1,0 +1,89 @@
+.content--title-box {
+  margin: 2em auto;
+}
+
+.content--title-box {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.content--title-box .content__title {
+  font-size: 3em;
+  text-decoration: none;
+}
+@media all and (max-width: 55rem) {
+  .content--title-box .content__title {
+    font-family: trade-gothic-next-compressed, sans-serif;
+    font-size: 1.75em;
+    font-size: clamp(1.75em, 8.5vw, 3em);
+  }
+}
+
+.content--title-box .content__title {
+  display: inline-block;
+  padding: 0.25em;
+  background: #1cdee8;
+  color: #002537;
+}
+.content--title-box .content__title::selection,
+.content--title-box .content__title ::selection {
+  background: #002537;
+  color: #1cdee8;
+}
+.content--title-box .content__title a:focus,
+.content--title-box .content__title button:focus,
+.content--title-box .content__title [tabindex="0"]:focus {
+  outline-color: #002537;
+}
+
+.speaker picture,
+.speaker [data-src-iframe] {
+  background: whitesmoke;
+}
+
+.speaker--picture-text {
+  padding: 2em 0;
+}
+.speaker--picture-text:nth-child(odd) .speaker__group {
+  flex-direction: row-reverse;
+}
+.speaker--picture-text picture {
+  max-width: 25em;
+}
+.speaker--picture-text picture::before {
+  padding-bottom: calc(100% / (1));
+}
+.speaker--picture-text .speaker__group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  overflow: hidden;
+  margin: -1em;
+  align-items: flex-start;
+}
+.speaker--picture-text .speaker__group > * {
+  flex: 0 1 auto;
+}
+.speaker--picture-text .speaker__group > * {
+  margin: 1em;
+}
+.speaker--picture-text .speaker__title, .speaker--picture-text .speaker__role {
+  font-family: trade-gothic-next-compressed, sans-serif;
+  text-transform: uppercase;
+}
+.speaker--picture-text .speaker__title {
+  font-size: 2.75em;
+  line-height: 1;
+}
+.speaker--picture-text .speaker__role {
+  font-size: 1.5em;
+  line-height: 1;
+}
+.speaker--picture-text .speaker__text {
+  flex: 1 1 25em;
+}
+.speaker--picture-text .speaker__text > * + * {
+  margin-top: 1rem;
+}
+
+/*# sourceMappingURL=speakers.css.map */

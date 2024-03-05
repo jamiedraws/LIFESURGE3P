@@ -1,0 +1,47 @@
+$select: ".banner" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+@mixin base {
+    #{$select} {
+        @content;
+    }
+}
+
+@mixin promo {
+    #{$select} {
+        &--promo {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            > span {
+                flex: 0 1 auto;
+
+                &:not(:last-child)::after {
+                    content: "-";
+                    margin: 0 0.25em;
+                }
+            }
+
+            font-family: fonts.get(primary-cond), sans-serif;
+            text-align: center;
+
+            @include background.color-map(
+                colors.get(callout),
+                colors.get(light)
+            );
+
+            #{$select} {
+            }
+
+            @content;
+        }
+    }
+}

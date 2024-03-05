@@ -1,0 +1,49 @@
+@use "sass:map";
+
+$select: ".font" !default;
+
+$list: (
+    primary: trade-gothic-next,
+    primary-cond: trade-gothic-next-compressed,
+    secondary: karla
+);
+
+@function get($name) {
+    @return map.get($list, $name);
+}
+
+@mixin selectors {
+    #{$select} {
+        @each $name, $font in $list {
+            &-#{$name} {
+                font-family: $font;
+            }
+        }
+    }
+}
+
+@mixin request {
+    @font-face {
+        font-family: karla;
+        font-display: fallback;
+        font-weight: normal;
+        src: url(/fonts/Karla-Regular.woff2) format("woff2"),
+            url(/fonts/Karla-Regular.woff) format("woff");
+    }
+
+    @font-face {
+        font-family: karla;
+        font-display: fallback;
+        font-weight: bold;
+        src: url(/fonts/Karla-Bold.woff2) format("woff2"),
+            url(/fonts/Karla-Bold.woff) format("woff");
+    }
+
+    @font-face {
+        font-family: karla;
+        font-display: fallback;
+        font-weight: 900;
+        src: url(/fonts/Karla-ExtraBold.woff2) format("woff2"),
+            url(/fonts/Karla-ExtraBold.woff) format("woff");
+    }
+}

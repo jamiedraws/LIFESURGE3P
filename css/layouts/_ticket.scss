@@ -1,0 +1,86 @@
+@use "sass:color";
+
+$select: ".ticket" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/group";
+@use "../../Shared/css/template/base/abstracts/position";
+
+@mixin base {
+    #{$select} {
+        @content;
+    }
+}
+
+@mixin list {
+    #{$select} {
+        &--list {
+            #{$select} {
+                &__group {
+                    > *:not(:last-child) {
+                        border-bottom: 0.15rem solid colors.get(border);
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin sold-out {
+    #{$select} {
+        &--sold-out {
+            position: relative;
+
+            #{$select} {
+                &__status {
+                    color: colors.get(callout);
+                    text-transform: uppercase;
+                    text-align: center;
+                    font-size: 4.5em;
+                    font-weight: bold;
+                    background: hsla(0, 0%, 81%, 0.5);
+                    text-shadow: 0 0.15rem 0.1rem white;
+
+                    @include position.center-absolute;
+                    z-index: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin nav {
+    #{$select} {
+        &--nav {
+            position: sticky;
+            font-size: 1.5em;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 0.5em;
+            text-align: center;
+            border-top: 0.15rem solid colors.get(border);
+
+            #{$select} {
+            }
+
+            @content;
+        }
+    }
+}

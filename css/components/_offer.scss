@@ -1,0 +1,52 @@
+$select: ".offer" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// media
+@use "../../Shared/css/template/base/media/contain";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/group";
+
+@mixin base {
+    #{$select} {
+        &__disclaimer {
+            display: block;
+            font-size: 0.75em;
+            text-transform: capitalize;
+        }
+
+        @content;
+    }
+}
+
+@mixin flag-text {
+    #{$select} {
+        &--flag-text {
+            color: colors.get(callout);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.25;
+
+            @include group.contain(0.25rem);
+            align-items: flex-start;
+
+            picture {
+                flex: 0 1 3rem;
+                @include contain.ratio(67/35) {
+                    background: colors.get(placeholder);
+                }
+            }
+
+            #{$select} {
+                &__text {
+                    flex: 1 1 7em;
+                }
+            }
+
+            @content;
+        }
+    }
+}

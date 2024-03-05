@@ -1,0 +1,30 @@
+$select: ".quote" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+@mixin base {
+    #{$select} {
+        @content;
+    }
+}
+
+@mixin bars {
+    #{$select} {
+        &--bars {
+            font: 1.5em fonts.get(primary-cond), sans-serif;
+            text-transform: uppercase;
+            text-align: center;
+
+            padding: 1em;
+            border: solid colors.get(accent);
+            border-width: 0.1rem 0;
+
+            #{$select} {
+            }
+
+            @content;
+        }
+    }
+}

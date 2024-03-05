@@ -1,0 +1,59 @@
+$select: ".button" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// components
+@use "../../Shared/css/template/base/components/button" with ($select: $select);
+@use "../../Shared/css/template/dtm/components/button" as dtm-button;
+
+@mixin base {
+    #{$select} {
+        @include structure {
+            display: inline-block;
+            border-radius: 0.25em;
+            font: 1rem/1 fonts.get(primary-cond), sans-serif;
+            overflow: hidden;
+
+            @include color-map(
+                colors.get(accent),
+                colors.get(primary),
+                colors.get(accent)
+            );
+        }
+
+        &--contrast {
+            @include color-map(
+                colors.get(light),
+                colors.get(primary),
+                colors.get(light)
+            );
+        }
+
+        &--can-scale {
+            font-size: 1em;
+        }
+    }
+}
+
+@mixin structure {
+    @include dtm-button.structure {
+        line-height: 1;
+        padding: 0.5em;
+        border: 0.1rem solid;
+        text-transform: uppercase;
+        text-decoration: none;
+
+        @content;
+    }
+}
+
+@mixin color-map(
+    $background-color: black,
+    $text-color: white,
+    $border-color: $text-color
+) {
+    @include button.color-map($background-color, $text-color);
+    border-color: $border-color;
+}

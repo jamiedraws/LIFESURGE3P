@@ -1,0 +1,284 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage<OrderPageViewData>" %>
+<%@ Import Namespace="Dtm.Framework.ClientSites" %>
+<%@ Import Namespace="LIFESURGE3P.Models" %>
+
+<%
+    var getFacebookImage = SettingsManager.ContextSettings["SocialPlugins.Facebook.OpenGraphImage"]; 
+    var getTwitterImage = SettingsManager.ContextSettings["SocialPlugins.Twitter.OpenGraphImage"];
+
+    var countdown = ViewData["OfferCountdown"] as OfferCountdown ?? new OfferCountdown();
+    var ticketUrl = SettingsManager.ContextSettings["Seminar.Template.Event.DestinationUrl--Event--", "#tickets"];
+    var sessionLoaded = DtmContext.VisitorSessionId != Guid.Empty;
+
+    if(sessionLoaded)
+    {
+        ticketUrl = ticketUrl.Replace("[#vsid#]", DtmContext.VisitorSessionId.ToString());
+    }
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title><%= Model.PageTitle %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="<%= Model.PageMetaDescription %>">
+	<meta name="keywords" content="<%= Model.PageMetaKeywords %>">
+
+    <!-- // Open Graph Metadata -->
+    <meta property="og:title" content="<%= Model.PageTitle %>">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="<%= Model.PageMetaDescription %>">
+    <meta property="og:url" content="<%= DtmContext.Domain.FullDomainOfferVersionContext %>">
+    <meta property="og:image" content="<%= getFacebookImage %>">
+
+    <!-- // Twitter Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= Model.PageTitle %>">
+    <meta name="twitter:description" content="<%= Model.PageMetaDescription %>">
+    <meta name="twitter:image" content="<%= getTwitterImage %>">
+    <meta name="twitter:domain" content="<%= DtmContext.Domain.FullDomainOfferVersionContext %>">
+
+    <% if (DtmContext.IsProxyIpAddress || DtmContext.CampaignDomains.Any(d => d.DomainId == DtmContext.DomainId && d.Domain.ToLower().Contains("dtmstage")))
+        { %>
+
+    <meta name="robots" content="noindex, nofollow" />
+
+    <% }
+    else
+    { %>
+
+    <meta name="google-site-verification" content="<%= Model.PageMetaVerify %>">
+    <meta name="msvalidate.01" content="2917D7D7D8F86474F86BEC25A9F8D71E">
+    <link rel="canonical" href="https://<%= Request.Url.Host %>">
+
+    <% } %>
+
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#012d3f">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <script>const covid = "<%= DtmContext.VersionId %>";</script>
+    <%= Html.Partial("ResourceManager") %>
+
+    <noscript>
+        <style>
+            .defer::after {
+                display: none;
+            }
+
+            .defer__progress {
+                visibility: visible;
+                opacity: 1;
+            }
+        </style>
+    </noscript>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+</head>
+<body>
+
+    <% 
+        var navList = new NavigationList();
+
+        navList.AddItem(new NavigationItem { 
+            Id = "home",
+            Name = "Home",
+            Page = "Index",
+            Hash = "#main"
+        });
+
+        navList.AddItem(new NavigationItem { 
+            Id = "speaker",
+            Name = "Speakers",
+            Page = "Index",
+            Hash = "#speakers",
+            ApplyHash = true
+        });
+
+        navList.AddItem(new NavigationItem { 
+            Id = "topics",
+            Name = "Topics",
+            Page = "Index",
+            Hash = "#topics",
+            ApplyHash = true
+        });
+
+        navList.AddItem(new NavigationItem { 
+            Id = "location",
+            Name = "Location",
+            Page = "Index",
+            Hash = "#location",
+            ApplyHash = true
+        });
+
+        navList.AddItem(new NavigationItem { 
+            Id = "benefits",
+            Name = "Benefits",
+            Page = "Benefits",
+            Hash = "#main"
+        });
+
+        navList.AddItem(new NavigationItem { 
+            Id = "faq",
+            Name = "FAQs",
+            Label = "FAQs (Frequently Asked Questions)",
+            Page = "FAQ",
+            Hash = "#main"
+        });
+
+        navList.AddItem(new NavigationItem { 
+            Id = "privacy-policy",
+            Name = "Privacy Policy",
+            Page = "Privacy-Policy",
+            Hash = "#main"
+        });
+
+        var homeItem = navList.GetItemById("home");
+        var privacyPolicyItem = navList.GetItemById("privacy-policy");
+
+        var excludeEntriesFromNav = new string[] { homeItem.Id, privacyPolicyItem.Id };
+        var navEntries = navList.Entries.Where(n => !excludeEntriesFromNav.Contains(n.Id));
+    %>
+    <!-- Header  -->
+    <header
+        aria-label="Logo, event information and navigation"
+        class="view nav section"
+    >
+        <span class="skip-link">
+            <a href="#main" class="skip-link__button" id="skip-link"
+                ><span>Skip To Main Content?</span></a
+            >
+        </span>
+        <% if (!countdown.IsExpired()) { %>
+        <div class="banner banner--promo">
+            <span>BOGO Free Ticket Sale, Ends June 14.</span> 
+            <span>Ultimate Plus tickets not included in sale.</span>
+        </div>
+        <% } %>
+        <div class="view__in section__in nav__group nav__in">
+            <div class="nav__event-logo-text nav__event-logo-text-inline">
+                <div class="event event--logo-text">
+                    <a href="<%= homeItem.Page %>" class="event__logo contain contain--logo">
+                        <img src="/images/logo.png" alt="Life Surge" />
+                    </a>
+                    <div class="event__text">
+                        <div class="event__location">Tampa | Sarasota</div>
+                        <div class="event__date">July 16, 2021</div>
+                    </div>
+                </div>
+            </div>
+            <button
+                type="button"
+                class="nav__label"
+                aria-label="Toggle Menu"
+            >
+                <span></span>
+            </button>
+            <div
+                class="nav__underlay nav__hide-on-bar"
+                role="presentation"
+            ></div>
+            <div class="nav__pane">
+                <div class="nav__group nav__in">
+                    <nav aria-label="Main Navigation" class="nav__list">
+                        <div class="nav__logo">
+                            <div
+                                class="
+                                    nav__event-logo-text
+                                    nav__event-logo-text-stack
+                                "
+                            >
+                                <div class="event event--logo-text">
+                                    <a href="<%= homeItem.Page %>" class="event__logo contain contain--logo">
+                                        <img
+                                            src="/images/logo.png"
+                                            alt="Life Surge"
+                                        />
+                                    </a>
+                                    <div class="event__text">
+                                        <div class="event__location">
+                                            Tampa | Sarasota
+                                        </div>
+                                        <div class="event__date">
+                                            July 16, 2021
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% foreach (var entry in navEntries) {
+                            var attributeList = string.Format(@"
+                                class=""nav__link"" 
+                                href=""{0}"" 
+                                id=""nav-{1}""", 
+                                entry.Page, 
+                                entry.Id);
+
+                            if (!string.IsNullOrEmpty(entry.Label)) {
+                                attributeList = string.Format(@"{0} 
+                                    aria-label=""{1}""", 
+                                    attributeList, 
+                                    entry.Label);
+                            }
+
+                            var link = string.Format(@"<a {0}><span>{1}</span></a>", 
+                                attributeList, 
+                                entry.Name);      
+                        %>
+                            <%= link %>
+                        <% } %>
+                        <a
+                            class="nav__link nav__button ticketUrl"
+                            href="<%= ticketUrl %>"
+                            id="nav-tickets"
+                        >
+                            <span class="button">Buy Tickets</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <%
+        ViewState["ticketUrl"] = ticketUrl;
+        ViewData["ticketUrl"] = ticketUrl;
+
+        %>
+    <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+
+    <!-- Footer -->
+    <footer
+        aria-label="Copyright Information"
+        class="view footer section bg bg--primary"
+    >
+        <div class="view__in section__in">
+            <address>
+                Copyright&copy; 2021 Life Surge. All Rights Reserved.
+                <a href="<%= privacyPolicyItem.Page %>">Privacy Policy</a>
+            </address>
+
+            <div aria-hidden="true" role="none" style="display: none;">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                <script>window.jQuery || document.write('<script src=\"\/shared\/js\/jquery-3.3.1.min.js\"><\/script>')</script>
+                <% Html.RenderSiteControls(SiteControlLocation.ContentTop); %>
+                <% Html.RenderSiteControls(SiteControlLocation.ContentBottom); %>
+                <% Html.RenderSiteControls(SiteControlLocation.PageBottom); %>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" role="dialog" aria-labelledby="modal-text">
+        <div class="modal__load-state"></div>
+        <div id="modal-text" class="modal__text">Loading</div>
+        <button type="button" class="modal__button button">Close</button>
+    </div>
+
+</body>
+</html>

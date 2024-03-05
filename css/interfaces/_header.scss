@@ -1,0 +1,28 @@
+@use "sass:map";
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+// layout
+@use "../layouts/nav";
+@use "../../Shared/css/template/base/layouts/view";
+
+// compoents
+@use "../../Shared/css/template/base/components/skip-link";
+@use "../components/event";
+@use "../components/banner";
+
+@mixin navbar {
+    @include skip-link.new;
+
+    @include banner.base;
+    @include banner.promo;
+    @include nav.base;
+
+    @include view.set-anchor-position(
+        $static-amount: 5.5rem,
+        $dynamic-amount: 5.5rem
+    );
+}

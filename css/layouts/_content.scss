@@ -1,0 +1,390 @@
+@use "sass:map";
+
+$select: ".content" !default;
+
+$mq: (
+    sm: 21rem,
+    md: 30rem
+);
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+@use "../config/queries";
+
+// components
+@use "../../Shared/css/template/base/components/list";
+
+// media
+@use "../../Shared/css/template/base/media/contain";
+
+// themes
+@use "../../Shared/css/template/base/themes/background";
+
+// abstracts
+@use "../../Shared/css/template/base/abstracts/copy";
+@use "../../Shared/css/template/base/abstracts/group";
+
+%contain-gap {
+    margin: 2em auto;
+}
+
+%contain-title {
+    @extend %contain-gap;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+%contain-text {
+    max-width: 46rem;
+    @include copy.separate(2em);
+}
+
+%contain-text-title {
+    @extend %contain-title;
+    @extend %contain-text;
+}
+
+%title {
+    font-size: 3em;
+    text-decoration: none;
+
+    @media all and (max-width: queries.get(document-lg)) {
+        font-family: fonts.get(primary-cond), sans-serif;
+        font-size: 1.75em;
+        font-size: clamp(1.75em, 8.5vw, 3em);
+    }
+}
+
+%group-icon-text-list {
+    $gap: 1.5em;
+
+    flex: 1 1 22em;
+    margin-top: #{$gap};
+    margin-bottom: #{$gap};
+}
+
+@mixin base {
+    #{$select} {
+        &__group {
+            @include group.contain;
+        }
+
+        &__title {
+            text-transform: uppercase;
+            font-family: fonts.get(primary), sans-serif;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        &__text {
+            @include copy.separate;
+        }
+
+        ul {
+            @include list.structure($offset: 1rem, $gap: 0.5rem);
+            @include list.background-position {
+                position: relative;
+                top: 0.25em;
+                margin-right: 0.25em;
+            }
+        }
+
+        li {
+            padding-right: 1.5em;
+        }
+
+        @content;
+    }
+}
+
+@mixin title-box {
+    #{$select} {
+        &--title-box {
+            @extend %contain-title;
+
+            #{$select} {
+                &__title {
+                    @extend %title;
+
+                    display: inline-block;
+                    padding: 0.25em;
+
+                    @include background.color-map(
+                        colors.get(accent),
+                        colors.get(primary)
+                    );
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin title-text {
+    #{$select} {
+        &--title-text {
+            @extend %contain-text-title;
+
+            #{$select} {
+                &__title {
+                    @extend %title;
+                }
+
+                &__pill-box {
+                    font-weight: bold;
+                    line-height: 1.25;
+                    background: white;
+                    padding: 1em 2em;
+                    border-radius: 2em;
+                    display: inline-block;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin text-list {
+    #{$select} {
+        &--text-list {
+            @extend %contain-text;
+            @extend %contain-gap;
+
+            #{$select} {
+                &__title {
+                    font: 1em fonts.get(primary), sans-serif;
+                }
+
+                &__title + ul {
+                    margin-top: 1em;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin ticket {
+    #{$select} {
+        &--ticket {
+            padding: 2em 0;
+
+            ul {
+                font-size: 0.9rem;
+            }
+
+            li {
+                display: inline-flex;
+            }
+
+            #{$select} {
+                &__group {
+                    justify-content: flex-start;
+                    @include group.gutter(1rem);
+
+                    > * {
+                        flex: 1 1 auto;
+                    }
+                }
+
+                &__title {
+                    font: 2.25em fonts.get(primary-cond), sans-serif;
+
+                    &:first-child {
+                        flex-basis: 7em;
+                    }
+                }
+
+                &__text-list {
+                    flex: 1 1 100%;
+                }
+
+                &__callout {
+                    text-align: center;
+                }
+            }
+
+            @media all and (max-width: map.get($mq, md)) {
+                #{$select} {
+                    &__group > #{$select}__title {
+                        margin-top: 0;
+                        margin-bottom: 0;
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin text-map {
+    #{$select} {
+        &--text-map {
+            #{$select} {
+                &__group {
+                    align-items: flex-start;
+                }
+
+                &__text {
+                    flex: 0 1 27em;
+                }
+
+                &__title {
+                    font-family: fonts.get(primary-cond), sans-serif;
+                    font-size: 2em;
+                }
+
+                &__map {
+                    @include contain.ratio(500/281) {
+                        max-width: 25em;
+                        background: colors.get(placeholder);
+                        border: 0;
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin icon-text-list {
+    #{$select} {
+        &--icon-text-list {
+            @extend %group-icon-text-list;
+
+            picture {
+                @include contain.ratio(1/1) {
+                    max-width: 5em;
+                }
+            }
+
+            #{$select} {
+                &__group {
+                    @media all and (min-width: map.get($mq, sm)) {
+                        flex-wrap: nowrap;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+                    }
+                }
+
+                &__title {
+                    font-size: 2.25em;
+
+                    @media all and (max-width: queries.get(document-lg)) {
+                        font-family: fonts.get(primary-cond), sans-serif;
+                    }
+
+                    @media all and (max-width: map.get($mq, sm)) {
+                        text-align: center;
+                    }
+                }
+
+                &__title-cond {
+                    font: 1.5em fonts.get(primary-cond), sans-serif;
+                }
+
+                &__desc {
+                    font-size: 1em;
+                    font-weight: bold;
+                }
+
+                &__text {
+                    flex: 1 1 22em;
+                    font-size: 0.9em;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin icon-text-list-group {
+    #{$select} {
+        &--icon-text-list-group {
+            #{$select} {
+                @extend %group-icon-text-list;
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin title-subtitle {
+    #{$select} {
+        &--title-subtitle {
+            text-transform: uppercase;
+            font-weight: bold;
+
+            @extend %contain-title;
+            @include copy.separate(0.5rem);
+
+            #{$select} {
+                &__title {
+                    @extend %title;
+                }
+
+                &__subtitle {
+                    font-size: 1.75em;
+
+                    @media all and (max-width: queries.get(document-lg)) {
+                        font-size: 1em;
+                        font-size: clamp(1em, 4.75vw, 1.75em);
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin text-video {
+    #{$select} {
+        &--text-video {
+            @extend %contain-gap;
+
+            text-align: center;
+
+            #{$select} {
+                &__text {
+                    flex: 0 1 25em;
+
+                    @media all and (min-width: 67.25rem) {
+                        order: -1;
+                    }
+                }
+
+                &__video {
+                    @include contain.ratio(16/9) {
+                        max-width: 25em;
+                        background: colors.get(placeholder);
+                        border: 0;
+                    }
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin text {
+    #{$select} {
+        &--text {
+            overflow: hidden;
+
+            #{$select} {
+            }
+
+            @content;
+        }
+    }
+}

@@ -1,0 +1,107 @@
+$select: ".event" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+// media
+@use "../../Shared/css/template/base/media/contain";
+
+@mixin base {
+    #{$select} {
+        @content;
+    }
+}
+
+$-divide-gap: 0.75em;
+$-border-width: 0.1em;
+
+@mixin logo-text {
+    #{$select} {
+        &--logo-text {
+            display: flex;
+            text-align: left;
+
+            #{$select} {
+                &__logo {
+                    @include contain.ratio(292/47) {
+                        max-width: 12.5em;
+                        min-width: 6.25em;
+                    }
+                }
+
+                &__text {
+                    flex: 1 1 auto;
+                    border: solid colors.get(accent);
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin logo-text-inline {
+    #{$select} {
+        &--logo-text {
+            align-items: center;
+
+            #{$select} {
+                &__text {
+                    margin: 0 0 0 #{$-divide-gap};
+                    padding-left: #{$-divide-gap};
+                    border-width: 0 0 0 #{$-border-width};
+                }
+
+                &__location,
+                &__date {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    max-width: 10em;
+                    width: 30vw;
+                }
+            }
+
+            @content;
+        }
+    }
+}
+
+@mixin logo-text-stack {
+    #{$select} {
+        &--logo-text {
+            flex-direction: column;
+            align-items: flex-start;
+
+            #{$select} {
+                &__logo {
+                    max-width: 6.25em;
+                }
+
+                &__text {
+                    margin: #{$-divide-gap} #{$-divide-gap} 0 0;
+                    padding-top: #{$-divide-gap};
+                    border-width: #{$-border-width} 0 0;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@mixin hide-text {
+    #{$select} {
+        &__text {
+            display: none;
+        }
+    }
+}
+
+@mixin hide-logo {
+    #{$select} {
+        &__logo {
+            display: none;
+        }
+    }
+}

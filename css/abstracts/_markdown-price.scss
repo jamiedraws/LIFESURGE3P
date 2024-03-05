@@ -1,0 +1,16 @@
+$select: ".markdown-price" !default;
+
+// config
+@use "../config/fonts";
+@use "../config/colors";
+
+@mixin base {
+    #{$select} {
+        display: inline;
+        color: colors.get(callout);
+        text-decoration: line-through;
+        margin-right: 0.25rem;
+
+        @content;
+    }
+}
